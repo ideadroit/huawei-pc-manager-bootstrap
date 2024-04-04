@@ -1,0 +1,45 @@
+name: Windows Build and Package
+
+on:
+  push:
+    branches: [ HONOR ]
+  pull_request:
+    branches: [ HONOR ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+    - name: Checkout HONOR branch
+      uses: actions/checkout@v2
+      with:
+        ref: HONOR
+
+    - name: Install Rust and setup
+      run: |
+        choco install rust-msvc -y
+        echo "C:\Users\runneradmin\.cargo\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8 
+        rustup target add x86_64-pc-windows-msvc
+        rustup target add i686-pc-windows-msvc
+
+    - name: Compile and Package
+      run: |
+        if (Test-Path dist -PathType Container) {
+          Remove-Item dist -Recurse -Force
+        }
+        New-Item -ItemType Directory -Force -Path dist
+        cargo +nightly build --release -p version --target=x86_64-pc-windows-msvc || exit 1
+        cargo +nightly-i686-pc-windows-msvc build --release -p huawei-pc-manager-bootstrap-core -p huawei-pc-manager-bootstrap --target=i686-pc-windows-msvc || exit 1
+        Copy-Item -Path "target\i686-pc-windows-msvc\release\huawei_pc_manager_bootstrap_core.dll" -Destination "dist"
+        Copy-Item -Path "target\i686-pc-windows-msvc\release\huawei-pc-manager-bootstrap.exe" -Destination "dist"
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: packaged-files
+        path: dist/*
