@@ -2,3 +2,8 @@
 members = [
   "packages/*"
 ]
+
+[
+unstable
+]
+features = ["unstable_features"]
