@@ -24,7 +24,8 @@ jobs:
       run: |
         choco install rust-msvc -y
         echo "C:\Users\runneradmin\.cargo\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8 
-        rustup update
+        rustup update nightly
+        rustup default nightly
         rustup target add x86_64-pc-windows-msvc
         rustup target add i686-pc-windows-msvc
 
