@@ -520,6 +520,6 @@ impl BootstrapApp {
             &program_files_dir
         };
 
-        Ok([program_files_dir, "Huawei", "PCManager"].iter().collect())
+        Ok([program_files_dir, "HONOR", "PCManager"].iter().collect())
     }
 }
