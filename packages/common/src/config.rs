@@ -18,7 +18,7 @@ impl Default for Config {
             manufacturer: "HONOR".to_string(),
             product_name: "HYM-W76".to_string(),
             version: "1.0".to_string(),
-            sn: "AHYMBB1C25601348".to_string(),
+            sn: "AHYMBB1C10801888".to_string(),
             sku: "2021AP1085B".to_string(),
         }
     }
